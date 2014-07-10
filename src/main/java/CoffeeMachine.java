@@ -1,6 +1,20 @@
-import email.Emailer;
-import email.SimpleEmailerImpl;
+import com.google.gson.Gson;
+import email.Email;
+import email.dao.EmailDao;
+import email.dao.EmailDaoImpl;
+import externaldata.ExternalMailingList;
+import log.Logger;
+import externaldata.SubscribeAction;
+import externaldata.TXTExternalMailingListImpl;
+import log.TXTLoggerImpl;
+import services.BrewListenerRunnable;
 
+
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static spark.Spark.*;
 /**
  * Date: 6/5/14
@@ -8,21 +22,64 @@ import static spark.Spark.*;
  */
 public class CoffeeMachine {
     public static void main(String[] args) {
-        get("/coffee",(request, response) -> {
-            return "Hello coffee";
+        //ON STARTUP
+        EmailDao emailDao = new EmailDaoImpl();
+        //STATIC FILES
+        staticFileLocation("/public"); // Static files
+
+        Thread thread = new Thread(new BrewListenerRunnable());
+        thread.start();
+
+        //ROUTES
+        get("/mailingList", (request, response) -> {
+
+            List<Email> emailList = emailDao.getMailingList();
+
+            StringBuilder stringBuilder = new StringBuilder();
+            Gson gson = new Gson();
+
+            for (Email email : emailList) {
+                gson.toJson(email.getEmailAddress(), stringBuilder);
+            }
+
+            return stringBuilder;
         });
 
-        get("/test",(request, response) -> {
-            return "Hello test";
+
+        post("/add", (request, response) -> {
+            if (isEmpty(request.queryParams("email"))){
+                return "Error: empty email not allowed.";
+            }
+
+            Email email = new Email();
+            if (!email.setEmailAddress(request.queryParams("email"))) {
+                return request.queryParams("email") + " is not a valid email address!";
+            }
+
+            if (emailDao.emailExists(email)) {
+                return email.getEmailAddress() + " is already subscribed!";
+            }
+            email.setCreatedOn(new Date());
+            emailDao.addEmail(email);
+
+            return request.queryParams("email") + " was successfully added to the list!";
         });
 
-        get("/mail/:email", (request, response) -> {
-            Emailer emailer = new SimpleEmailerImpl();
-            String message = "This is gonna be a long message";
-            emailer.sendEmail("russ4stall@gmail.com", "the subject", message);
-
-            return "Message sent to " + request.params(":email");
+        post("/unsubscribe", (request, response) -> {
+            if (isEmpty(request.queryParams("email"))) {
+                return "Error: empty email not allowed.";
+            }
+            Email email = new Email();
+            if (!email.setEmailAddress(request.queryParams("email"))) {
+                return request.queryParams("email") + " is not a valid email address!";
+            }
+            if (!emailDao.emailExists(email)) {
+                return "Error: email doesn't exist.";
+            }
+            emailDao.unsubscribe(email);
+            return request.queryParams("email") + " successfully unsubscribed.";
         });
+
+
     }
-
 }
