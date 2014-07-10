@@ -2,17 +2,11 @@ import com.google.gson.Gson;
 import email.Email;
 import email.dao.EmailDao;
 import email.dao.EmailDaoImpl;
-import externaldata.ExternalMailingList;
-import log.Logger;
-import externaldata.SubscribeAction;
-import externaldata.TXTExternalMailingListImpl;
-import log.TXTLoggerImpl;
 import services.BrewListenerRunnable;
 
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static spark.Spark.*;

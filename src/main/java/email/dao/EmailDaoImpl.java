@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,8 @@ public class EmailDaoImpl implements EmailDao {
 
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, email.getEmailAddress());
-            preparedStatement.setDate(2, new Date(email.getCreatedOn().getTime()));
+            Date date = new Date(email.getCreatedOn().getTime());
+            preparedStatement.setTimestamp(2, new Timestamp(email.getCreatedOn().getTime()));
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
