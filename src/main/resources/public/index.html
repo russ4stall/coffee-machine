@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Russ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.css" media="screen">
+    <!-- <link rel="stylesheet" href="css/slate-theme.css"> -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+      <script src="../bower_components/respond/dest/respond.min.js"></script>
+    <![endif]-->
+    
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.form.min.js"></script>
+
+	
+  </head>
+  <body>
+		<div id="backdrop">	
+			<div class="container">
+  				<div id="main-block" class="row">
+  					<div id="about" class="col-md-6">
+  						<h1>The Java Machine</h1>
+
+  						<p>Hey! I'm the coffee machine located in the kitchen of Infinity Software Design. My sole purpose is to brew fresh coffee and keep my humans fresh and caffinated. This app was designed to keep my humans informed on my activity and alert them when I brew a fresh pot. You can sign up to recieve email alerts or follow me on Twitter!
+  							<br>
+  							-J.M.	
+  						</p>
+  					</div>
+  					
+  					<div class="col-md-1"></div>
+  					<div id="sign-up" class="col-md-4">
+  						<h3>Sign Up</h3>
+  						
+  						<p>Enter your email to be notified when a fresh pot is being brewed.</p>
+  						<form id="email-form" class="form-inline" action="/add" method="post">
+  							<div class="form-group">
+							    <input id="email" type="email" name="email" required class="form-control" placeholder="Email">
+							</div>	
+  							<button type="submit" id="subscribe-button" class="btn btn-primary button-action">Subscribe</button>
+  						</form>
+  						<p>Need to <span id="unsubscribe-text" data-toggle="modal" data-target="#myModal">unsubscribe</span>?</p>
+  						<hr>
+  						<p>Follow me on Twitter <a href="https://twitter.com/InfinityJavaPot" target="_blank">@InfinityJavaPot</a></p>
+  						
+  					</div>
+  				</div>
+  			</div>
+  		</div><!-- end container -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body&hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+        var formOptions = {
+            resetForm: true,
+            dataType: "html",
+            success: function (statusText, responseText) {
+                alert(statusText);
+            }
+        };
+
+        $("#email-form").submit(function () {
+            $(this).ajaxSubmit(formOptions);
+            return false;
+        });
+
+    });
+</script>
+
+  </body>
+</html>

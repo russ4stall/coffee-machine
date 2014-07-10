@@ -1,0 +1,36 @@
+body {
+	background-color: black;
+	color: lightgray;
+}
+
+#backdrop {
+	background-image: url(../images/ikitchen.jpg);
+	background-color: black;
+	margin-top: 60px;
+}
+
+#main-block {
+	margin: 40px 0px 40px 0px;	
+}
+
+#about {
+}
+
+#sign-up {
+	background: rgba(0,0,0,.65);
+	padding-top: 1px;
+	padding-bottom: 15px;
+}
+
+form {
+	margin-bottom: 10px;
+}
+
+#unsubscribe-text {
+	color: #428bca;
+}
+
+#unsubscribe-text:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
