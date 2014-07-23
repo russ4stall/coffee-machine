@@ -68,6 +68,7 @@ public class EmailDaoImpl implements EmailDao {
             emailExists = resultSet.getInt("count(1)") == 1;
 
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             SqlUtilities.closePreparedStatement(preparedStatement);
@@ -90,9 +91,9 @@ public class EmailDaoImpl implements EmailDao {
         //SqlUtilities.jbdcUtil();
         String query = null;
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/fourscorepicks", "fourscorepicks", "fourscorepicks");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
 
-            query = "SELECT * FROM email where unsubscribed = null";
+            query = "SELECT * FROM email where unsubscribed = 0";
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){

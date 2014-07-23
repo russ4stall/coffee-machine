@@ -21,6 +21,7 @@ public class CoffeeMachine {
         //STATIC FILES
         staticFileLocation("/public"); // Static files
 
+        //Service listening for button presses
         Thread thread = new Thread(new BrewListenerRunnable());
         thread.start();
 
