@@ -25,6 +25,9 @@
         <module name="coffee-machine" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="coffee-machine" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
 
