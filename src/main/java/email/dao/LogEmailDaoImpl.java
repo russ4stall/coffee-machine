@@ -23,7 +23,6 @@ public class LogEmailDaoImpl implements LogEmailDao {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, logEmail.getEmail());
             preparedStatement.setString(2, logEmail.getLog());
-            /*Date date = new Date(logEmail.getCreatedOn().getTime());*/
             preparedStatement.setTimestamp(3, new Timestamp(logEmail.getCreatedOn().getTime()));
             preparedStatement.executeUpdate();
 

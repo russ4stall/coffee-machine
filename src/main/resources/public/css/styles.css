@@ -26,10 +26,6 @@ form {
 	margin-bottom: 10px;
 }
 
-#unsubscribe-text {
-	color: #428bca;
-}
-
 #unsubscribe-text:hover {
 	text-decoration: underline;
 	cursor: pointer;

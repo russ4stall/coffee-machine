@@ -6,6 +6,8 @@ import email.dao.EmailDao;
 import email.dao.EmailDaoImpl;
 import email.dao.LogEmailDao;
 import email.dao.LogEmailDaoImpl;
+import org.apache.commons.validator.routines.EmailValidator;
+import org.flywaydb.core.Flyway;
 import services.BrewListenerRunnable;
 
 
@@ -20,9 +22,14 @@ import static spark.Spark.*;
  */
 public class CoffeeMachine {
     public static void main(String[] args) {
-        //ON STARTUP
+        //SETUP
         EmailDao emailDao = new EmailDaoImpl();
         LogEmailDao logEmailDao = new LogEmailDaoImpl();
+
+        Flyway flyway = new Flyway();
+        flyway.setDataSource("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
+        flyway.migrate();
+
         //STATIC FILES
         staticFileLocation("/public"); // Static files
 
@@ -31,35 +38,30 @@ public class CoffeeMachine {
         thread.start();
 
         //ROUTES
-        get("/mailingList", (request, response) -> {
-
+        get("/mailinglist", (request, response) -> {
             List<Email> emailList = emailDao.getMailingList();
-
             StringBuilder stringBuilder = new StringBuilder();
-            Gson gson = new Gson();
-
             for (Email email : emailList) {
-                gson.toJson(email.getEmailAddress(), stringBuilder);
+               stringBuilder.append(email.getEmailAddress() + "<br/>");
             }
-
             return stringBuilder;
         });
 
 
         post("/add", (request, response) -> {
+           //validate
             if (isEmpty(request.queryParams("email"))){
                 return "Error: empty email not allowed.";
             }
-
-            Email email = new Email();
-            if (!email.setEmailAddress(request.queryParams("email"))) {
+            EmailValidator emailValidator = EmailValidator.getInstance();
+            if (!emailValidator.isValid(request.queryParams("email"))) {
                 return request.queryParams("email") + " is not a valid email address!";
             }
 
+            Email email = new Email(request.queryParams("email"));
             if (emailDao.emailExists(email)) {
                 return email.getEmailAddress() + " is already subscribed!";
             }
-            email.setCreatedOn(new Date());
             emailDao.addEmail(email);
             logEmailDao.addLog(new LogEmail(email.getEmailAddress(), LogEmailAction.SUBSCRIBED.toString(), new Date()));
 
@@ -67,13 +69,16 @@ public class CoffeeMachine {
         });
 
         post("/unsubscribe", (request, response) -> {
+            //validate
             if (isEmpty(request.queryParams("email"))) {
                 return "Error: empty email not allowed.";
             }
-            Email email = new Email();
-            if (!email.setEmailAddress(request.queryParams("email"))) {
+            EmailValidator emailValidator = EmailValidator.getInstance();
+            if (!emailValidator.isValid(request.queryParams("email"))) {
                 return request.queryParams("email") + " is not a valid email address!";
             }
+
+            Email email = new Email(request.queryParams("email"));
             if (!emailDao.emailExists(email)) {
                 return "Error: email doesn't exist.";
             }
@@ -81,7 +86,5 @@ public class CoffeeMachine {
             logEmailDao.addLog(new LogEmail(email.getEmailAddress(), LogEmailAction.UNSUBSCRIBED.toString(), new Date()));
             return request.queryParams("email") + " successfully unsubscribed.";
         });
-
-
     }
 }

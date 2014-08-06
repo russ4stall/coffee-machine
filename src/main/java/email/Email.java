@@ -15,6 +15,11 @@ public class Email {
     public Email() {
     }
 
+    public Email(String emailAddress) {
+        this.emailAddress = emailAddress;
+        this.createdOn = new Date();
+    }
+
     public Email(int id, String emailAddress, Date createdOn) {
         this.id = id;
         this.emailAddress = emailAddress;
