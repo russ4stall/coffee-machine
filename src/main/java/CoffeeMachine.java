@@ -47,7 +47,6 @@ public class CoffeeMachine {
             return stringBuilder;
         });
 
-
         post("/add", (request, response) -> {
            //validate
             if (isEmpty(request.queryParams("email"))){
