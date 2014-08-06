@@ -17,7 +17,7 @@ public interface EmailDao {
 
     boolean emailExists(Email email);
 
-    void unsubscribe(Email email);
+    void removeEmail(Email email);
 
     /**
      * Gets all emails not unsubscribed.

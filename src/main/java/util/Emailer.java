@@ -1,4 +1,4 @@
-package email.utils;
+package util;
 
 import javax.mail.Session;
 import java.io.UnsupportedEncodingException;

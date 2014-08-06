@@ -22,19 +22,16 @@ import java.util.List;
 public class EmailDaoImpl implements EmailDao {
     @Override
     public void addEmail(Email email) {
-        //SqlUtilities.jbdcUtil();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
 
-            String query = "INSERT INTO email (email, createdOn) " +
-                    "VALUES (?, ?)";
+            String query = "INSERT INTO email (email, createdOn) " + "VALUES (?, ?)";
 
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, email.getEmailAddress());
-            Date date = new Date(email.getCreatedOn().getTime());
             preparedStatement.setTimestamp(2, new Timestamp(email.getCreatedOn().getTime()));
             preparedStatement.executeUpdate();
 
@@ -78,8 +75,25 @@ public class EmailDaoImpl implements EmailDao {
     }
 
     @Override
-    public void unsubscribe(Email email) {
+    public void removeEmail(Email email) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
 
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
+
+            String query = "DELETE FROM email WHERE email = ? ";
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, email.getEmailAddress());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            SqlUtilities.closePreparedStatement(preparedStatement);
+            SqlUtilities.closeConnection(connection);
+        }
     }
 
     @Override
@@ -93,20 +107,17 @@ public class EmailDaoImpl implements EmailDao {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
 
-            query = "SELECT * FROM email where unsubscribed = 0";
+            query = "SELECT * FROM email";
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 Email email = new Email(
                         resultSet.getInt("id"),
                         resultSet.getString("email"),
-                        resultSet.getDate("createdOn"),
-                        resultSet.getBoolean("unsubscribed"));
+                        resultSet.getDate("createdOn"));
 
                 emailList.add(email);
             }
-
-
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -1,7 +1,11 @@
 import com.google.gson.Gson;
 import email.Email;
+import email.LogEmail;
+import email.LogEmailAction;
 import email.dao.EmailDao;
 import email.dao.EmailDaoImpl;
+import email.dao.LogEmailDao;
+import email.dao.LogEmailDaoImpl;
 import services.BrewListenerRunnable;
 
 
@@ -18,6 +22,7 @@ public class CoffeeMachine {
     public static void main(String[] args) {
         //ON STARTUP
         EmailDao emailDao = new EmailDaoImpl();
+        LogEmailDao logEmailDao = new LogEmailDaoImpl();
         //STATIC FILES
         staticFileLocation("/public"); // Static files
 
@@ -56,6 +61,7 @@ public class CoffeeMachine {
             }
             email.setCreatedOn(new Date());
             emailDao.addEmail(email);
+            logEmailDao.addLog(new LogEmail(email.getEmailAddress(), LogEmailAction.SUBSCRIBED.toString(), new Date()));
 
             return request.queryParams("email") + " was successfully added to the list!";
         });
@@ -71,7 +77,8 @@ public class CoffeeMachine {
             if (!emailDao.emailExists(email)) {
                 return "Error: email doesn't exist.";
             }
-            emailDao.unsubscribe(email);
+            emailDao.removeEmail(email);
+            logEmailDao.addLog(new LogEmail(email.getEmailAddress(), LogEmailAction.UNSUBSCRIBED.toString(), new Date()));
             return request.queryParams("email") + " successfully unsubscribed.";
         });
 

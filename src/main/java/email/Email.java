@@ -11,16 +11,14 @@ public class Email {
     private int id;
     private String emailAddress;
     private Date createdOn;
-    private boolean disabled;
 
     public Email() {
     }
 
-    public Email(int id, String emailAddress, Date createdOn, boolean disabled) {
+    public Email(int id, String emailAddress, Date createdOn) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.createdOn = createdOn;
-        this.disabled = disabled;
     }
 
     public int getId() {
@@ -52,13 +50,5 @@ public class Email {
 
     public void setCreatedOn(Date createdOn) {
         this.createdOn = createdOn;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
     }
 }
