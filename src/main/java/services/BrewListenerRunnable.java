@@ -13,6 +13,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 /**
  * Date: 6/13/14
  * Time: 5:00 PM
@@ -35,6 +37,14 @@ public class BrewListenerRunnable implements Runnable {
 
                     String fromClient = in.readLine();
                     System.out.println("received: " + fromClient);
+
+                    if (!isEmpty(fromClient)) {
+                        for (CoffeeType type : CoffeeType.values()) {
+                            if (type.name().equals(fromClient)) {
+                                System.out.println(fromClient);
+                            }
+                        }
+                    }
 
                     if(fromClient.equals(CoffeeType.COLUMBIAN.toString())) {
                         System.out.println("ees columbian coffee");
