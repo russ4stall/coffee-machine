@@ -7,5 +7,5 @@ package pot;
  * @author Russ Forstall
  */
 public enum CoffeeType {
-    COLUMBIAN, DONUT_SHOP, FLAVORED_GOODNESS
+    COLUMBIAN, DONUT_SHOP, FLAVORED_GOODNESS, UNKNOWN
 }

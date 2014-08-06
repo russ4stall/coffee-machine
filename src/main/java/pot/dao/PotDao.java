@@ -1,5 +1,6 @@
 package pot.dao;
 
+import pot.CoffeeType;
 import pot.Pot;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface PotDao {
 
     List<Pot> getAll();
 
-    List<Pot> getAllByType();
+    List<Pot> getAllByType(CoffeeType coffeeType);
 }
