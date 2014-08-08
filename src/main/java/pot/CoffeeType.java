@@ -17,4 +17,16 @@ public enum CoffeeType {
         }
         return false;
     }
+
+    public String display() {
+        if (this.equals(COLUMBIAN)) {
+            return "Columbian";
+        } else if (this.equals(DONUT_SHOP)) {
+            return "Donut Shop";
+        } else if (this.equals(FLAVORED_GOODNESS)) {
+            return "Flavored Goodness";
+        } else {
+            return "UNKNOWN";
+        }
+    }
 }
