@@ -7,5 +7,14 @@ package pot;
  * @author Russ Forstall
  */
 public enum CoffeeType {
-    COLUMBIAN, DONUT_SHOP, FLAVORED_GOODNESS, UNKNOWN
+    COLUMBIAN, DONUT_SHOP, FLAVORED_GOODNESS, UNKNOWN;
+
+    public static final boolean isValidCoffeeType(String s) {
+        for (CoffeeType type : CoffeeType.values()) {
+            if (s.equals(type.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

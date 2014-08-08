@@ -20,34 +20,29 @@ import java.util.Date;
  * @author Russ Forstall
  */
 public class BrewListenerRunnable implements Runnable {
+    private static final int PORT = 8989;
 
     @Override
     public void run() {
         PotDao potDao = new PotDaoImpl();
         ServerSocket listener = null;
         try {
-            listener = new ServerSocket(8989);
+            listener = new ServerSocket(PORT);
+            System.out.println("BrewListener start listening on port " + PORT + ".");
             while (true) {
                 Socket client = listener.accept();
                 try {
                     BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                    PrintWriter out = new PrintWriter(client.getOutputStream(),true);
+                    PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 
                     String fromClient = in.readLine();
                     System.out.println("received: " + fromClient);
 
-                    if(fromClient.equals(CoffeeType.COLUMBIAN.toString())) {
-                        System.out.println("ees columbian coffee");
-                        potDao.addPot(new Pot(CoffeeType.COLUMBIAN, new Date()));
-                    } else if (fromClient.equals(CoffeeType.DONUT_SHOP.toString())) {
-                        System.out.println("da donut shop coffee");
-                        potDao.addPot(new Pot(CoffeeType.DONUT_SHOP, new Date()));
-                    } else if (fromClient.equals(CoffeeType.FLAVORED_GOODNESS.toString())){
-                        System.out.println("mmm flavored goodness");
-                        potDao.addPot(new Pot(CoffeeType.FLAVORED_GOODNESS, new Date()));
-                    } else if (fromClient.equals(CoffeeType.UNKNOWN.toString())) {
-                        System.out.println("mmm coffee!");
-                        potDao.addPot(new Pot(CoffeeType.UNKNOWN, new Date()));
+                    if (CoffeeType.isValidCoffeeType(fromClient)) {
+                        potDao.addPot(new Pot(CoffeeType.valueOf(fromClient), new Date()));
+                        System.out.println("A pot of " + fromClient + " was brewed!");
+                    } else {
+                        System.out.println("Invalid data from client");
                     }
 
                 } finally {

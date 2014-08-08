@@ -22,31 +22,24 @@ import static spark.Spark.*;
  */
 public class CoffeeMachine {
     public static void main(String[] args) {
-        //SETUP
-        EmailDao emailDao = new EmailDaoImpl();
-        LogEmailDao logEmailDao = new LogEmailDaoImpl();
 
+        //schema migration
         Flyway flyway = new Flyway();
         flyway.setDataSource("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
         flyway.migrate();
 
-        //STATIC FILES
-        staticFileLocation("/public"); // Static files
-
-        //Service listening for button presses
+        //service for listening for button presses
         Thread thread = new Thread(new BrewListenerRunnable());
         thread.start();
 
-        //ROUTES
-        get("/mailinglist", (request, response) -> {
-            List<Email> emailList = emailDao.getMailingList();
-            StringBuilder stringBuilder = new StringBuilder();
-            for (Email email : emailList) {
-               stringBuilder.append(email.getEmailAddress() + "<br/>");
-            }
-            return stringBuilder;
-        });
+        //point Spark to static resources
+        staticFileLocation("/public");
 
+        //instantiate database access objects
+        EmailDao emailDao = new EmailDaoImpl();
+        LogEmailDao logEmailDao = new LogEmailDaoImpl();
+
+        //ROUTES
         post("/add", (request, response) -> {
            //validate
             if (isEmpty(request.queryParams("email"))){
