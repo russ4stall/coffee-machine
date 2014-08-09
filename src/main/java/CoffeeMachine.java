@@ -7,6 +7,8 @@ import email.dao.EmailDaoImpl;
 import email.dao.LogEmailDao;
 import email.dao.LogEmailDaoImpl;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.flywaydb.core.Flyway;
 import services.BrewListenerRunnable;
 
@@ -21,7 +23,11 @@ import static spark.Spark.*;
  * @author Russ Forstall
  */
 public class CoffeeMachine {
+    static Logger log = Logger.getLogger(CoffeeMachine.class);
+
     public static void main(String[] args) {
+        BasicConfigurator.configure();
+        log.info("umm... app has started");
 
         //schema migration
         Flyway flyway = new Flyway();

@@ -35,13 +35,13 @@ public class BrewListenerRunnable implements Runnable {
 
 
         try (ServerSocket listener = new ServerSocket(PORT)) {
-            System.out.println("BrewListener start listening on port " + PORT + ".");
+            System.out.println("BrewListener started listening on port " + PORT + ".");
             while (true) {
                 try (Socket client = listener.accept()) {
                     BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
                     String fromClient = in.readLine();
-                    System.out.println("received: " + fromClient);
+                    System.out.println("BrewListener(on port:" + PORT + " ) received: " + fromClient);
 
                     if (CoffeeType.isValidCoffeeType(fromClient)) {
                         CoffeePotTask coffeePotTask = new CoffeePotTask();

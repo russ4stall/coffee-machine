@@ -28,6 +28,8 @@ public class CoffeePotTask{
 
         String message = messageMaker.createMessage(coffeeType);
         notifier.notify(coffeeType.display() + " coffee's on", message);
+
+        System.out.println("CoffeePotTask has run.");
     }
 
     public void setCoffeeType(CoffeeType coffeeType) {

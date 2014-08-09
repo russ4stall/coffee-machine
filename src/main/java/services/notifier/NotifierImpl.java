@@ -13,10 +13,13 @@ public class NotifierImpl implements Notifier{
     @Override
     public void notify(String subject, String message) {
         //send tweet
-        CoffeeTweeter tweeter = new CoffeeTweeterImpl();
-        tweeter.tweet(message);
+        //CoffeeTweeter tweeter = new CoffeeTweeterImpl();
+        //tweeter.tweet(message);
         //send email
         CoffeeEmailer emailer = new CoffeeEmailerImpl();
         emailer.sendToAll(subject, message);
+
+        System.out.println(subject);
+        System.out.println(message);
     }
 }
