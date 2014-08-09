@@ -4,6 +4,12 @@ import pot.CoffeeType;
 import pot.Pot;
 import pot.dao.PotDao;
 import pot.dao.PotDaoImpl;
+import services.messages.MessageMaker;
+import services.messages.MessageMakerFactory;
+import services.messages.SimpleMessageMaker;
+import services.notifier.Notifier;
+import services.notifier.NotifierFactory;
+import services.notifier.NotifierImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,40 +30,36 @@ public class BrewListenerRunnable implements Runnable {
 
     @Override
     public void run() {
-        PotDao potDao = new PotDaoImpl();
-        ServerSocket listener = null;
-        try {
-            listener = new ServerSocket(PORT);
+        MessageMakerFactory messageMakerFactory = new MessageMakerFactory(new SimpleMessageMaker());
+        NotifierFactory notifierFactory = new NotifierFactory(new NotifierImpl());
+
+
+        try (ServerSocket listener = new ServerSocket(PORT)) {
             System.out.println("BrewListener start listening on port " + PORT + ".");
             while (true) {
-                Socket client = listener.accept();
-                try {
+                try (Socket client = listener.accept()) {
                     BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                    PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 
                     String fromClient = in.readLine();
                     System.out.println("received: " + fromClient);
 
                     if (CoffeeType.isValidCoffeeType(fromClient)) {
-                        potDao.addPot(new Pot(CoffeeType.valueOf(fromClient), new Date()));
+                        CoffeePotTask coffeePotTask = new CoffeePotTask();
+                        coffeePotTask.setCoffeeType(CoffeeType.valueOf(fromClient));
+                        coffeePotTask.setMessageMaker(messageMakerFactory);
+                        coffeePotTask.setNotifier(notifierFactory);
+                        coffeePotTask.setPotDao(new PotDaoImpl());
+                        coffeePotTask.executeTask();
+
                         System.out.println("A pot of " + fromClient + " was brewed!");
                     } else {
                         System.out.println("Invalid data from client");
                     }
 
-                } finally {
-                    client.close();
                 }
             }
         } catch (IOException e) {
             System.out.println(e.getStackTrace());
-        }
-        finally {
-            try {
-            listener.close();
-            } catch (IOException e) {
-                System.out.println(e.getStackTrace());
-            }
         }
     }
 

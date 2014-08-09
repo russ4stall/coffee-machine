@@ -11,12 +11,12 @@ import services.twitter.CoffeeTweeterImpl;
 public class NotifierImpl implements Notifier{
 
     @Override
-    public void notify(String message) {
+    public void notify(String subject, String message) {
         //send tweet
         CoffeeTweeter tweeter = new CoffeeTweeterImpl();
         tweeter.tweet(message);
         //send email
         CoffeeEmailer emailer = new CoffeeEmailerImpl();
-        emailer.sendToAll("Subject", message);
+        emailer.sendToAll(subject, message);
     }
 }

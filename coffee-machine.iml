@@ -47,6 +47,7 @@
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.25" level="project" />
     <orderEntry type="library" name="Maven: org.flywaydb:flyway-core:3.0" level="project" />
     <orderEntry type="library" name="Maven: org.twitter4j:twitter4j-core:4.0.2" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.4" level="project" />
   </component>
 </module>
 
