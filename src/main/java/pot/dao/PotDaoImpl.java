@@ -1,5 +1,6 @@
 package pot.dao;
 
+import coffeemachine.CoffeeMachineDao;
 import email.Email;
 import pot.CoffeeType;
 import pot.Pot;
@@ -15,14 +16,14 @@ import java.util.List;
  *
  * @author Russ Forstall
  */
-public class PotDaoImpl implements PotDao {
+public class PotDaoImpl extends CoffeeMachineDao implements PotDao {
     @Override
     public void addPot(Pot pot) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
+            connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getName(), dataSource.getPassword());
 
             String query = "INSERT INTO pot (type, brewedOn) " +
                     "VALUES (?, ?)";
@@ -49,7 +50,7 @@ public class PotDaoImpl implements PotDao {
         //SqlUtilities.jbdcUtil();
         String query = null;
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
+            connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getName(), dataSource.getPassword());
 
             query = "SELECT * FROM pot";
             preparedStatement = connection.prepareStatement(query);
@@ -84,7 +85,7 @@ public class PotDaoImpl implements PotDao {
         //SqlUtilities.jbdcUtil();
         String query = null;
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
+            connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getName(), dataSource.getPassword());
 
             query = "SELECT * FROM pot WHERE type = ?";
             preparedStatement = connection.prepareStatement(query);

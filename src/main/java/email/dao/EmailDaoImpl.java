@@ -1,10 +1,10 @@
 package email.dao;
 
+import coffeemachine.CoffeeMachineDao;
 import email.Email;
 import util.SqlUtilities;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,14 +19,15 @@ import java.util.List;
  *
  * @author Russ Forstall
  */
-public class EmailDaoImpl implements EmailDao {
+public class EmailDaoImpl extends CoffeeMachineDao implements EmailDao {
+
     @Override
     public void addEmail(Email email) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
+            connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getName(), dataSource.getPassword());
 
             String query = "INSERT INTO email (email, createdOn) " + "VALUES (?, ?)";
 
@@ -56,7 +57,7 @@ public class EmailDaoImpl implements EmailDao {
         ResultSet resultSet = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
+            connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getName(), dataSource.getPassword());
 
             preparedStatement = connection.prepareStatement("SELECT count(1) FROM email WHERE email=?");
             preparedStatement.setString(1, email.getEmailAddress());
@@ -80,7 +81,7 @@ public class EmailDaoImpl implements EmailDao {
         PreparedStatement preparedStatement = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
+            connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getName(), dataSource.getPassword());
 
             String query = "DELETE FROM email WHERE email = ? ";
 
@@ -105,7 +106,7 @@ public class EmailDaoImpl implements EmailDao {
         //SqlUtilities.jbdcUtil();
         String query = null;
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
+            connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getName(), dataSource.getPassword());
 
             query = "SELECT * FROM email";
             preparedStatement = connection.prepareStatement(query);

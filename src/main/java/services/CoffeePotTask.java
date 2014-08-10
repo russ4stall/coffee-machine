@@ -21,7 +21,8 @@ public class CoffeePotTask{
     private Notifier notifier;
     private PotDao potDao;
 
-    public CoffeePotTask() {}
+    public CoffeePotTask() {
+    }
 
     public void executeTask() {
         potDao.addPot(new Pot(coffeeType, new Date()));
@@ -36,16 +37,8 @@ public class CoffeePotTask{
         this.coffeeType = coffeeType;
     }
 
-    public void setMessageMaker(MessageMakerFactory messageMakerFactory) {
-        this.messageMaker = messageMakerFactory.getMessageMaker();
-    }
-
     public void setMessageMaker(MessageMaker messageMaker) {
         this.messageMaker = messageMaker;
-    }
-
-    public void setNotifier(NotifierFactory notifierFactory) {
-        this.notifier = notifierFactory.getNotifier();
     }
 
     public void setNotifier(Notifier notifier) {

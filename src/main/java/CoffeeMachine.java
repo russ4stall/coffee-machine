@@ -1,4 +1,5 @@
-import com.google.gson.Gson;
+import coffeemachine.ApplicationScope;
+import coffeemachine.CoffeeMachineStartUp;
 import email.Email;
 import email.LogEmail;
 import email.LogEmailAction;
@@ -9,12 +10,10 @@ import email.dao.LogEmailDaoImpl;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.flywaydb.core.Flyway;
 import services.BrewListenerRunnable;
 
 
 import java.util.Date;
-import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static spark.Spark.*;
@@ -29,10 +28,8 @@ public class CoffeeMachine {
         BasicConfigurator.configure();
         log.info("umm... app has started");
 
-        //schema migration
-        Flyway flyway = new Flyway();
-        flyway.setDataSource("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
-        flyway.migrate();
+        CoffeeMachineStartUp setUp = new CoffeeMachineStartUp();
+        setUp.execute();
 
         //service for listening for button presses
         Thread thread = new Thread(new BrewListenerRunnable());

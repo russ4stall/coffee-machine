@@ -1,5 +1,6 @@
 package email.dao;
 
+import coffeemachine.CoffeeMachineDao;
 import email.LogEmail;
 import util.SqlUtilities;
 
@@ -8,14 +9,15 @@ import java.sql.*;
 /**
  * Created by russ on 8/5/14.
  */
-public class LogEmailDaoImpl implements LogEmailDao {
+public class LogEmailDaoImpl extends CoffeeMachineDao implements LogEmailDao {
+
     @Override
     public void addLog(LogEmail logEmail) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/coffeemachine", "coffee", "coffee");
+            connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getName(), dataSource.getPassword());
 
             String query = "INSERT INTO logemail (email, log, createdOn) " +
                     "VALUES (?, ?, ?)";
