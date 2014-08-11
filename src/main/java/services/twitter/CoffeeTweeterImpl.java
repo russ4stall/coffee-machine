@@ -6,6 +6,8 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
+import java.util.Date;
+
 /**
  * Created by russellf on 8/7/2014.
  */
@@ -23,7 +25,8 @@ public class CoffeeTweeterImpl implements CoffeeTweeter {
             TwitterFactory tf = new TwitterFactory(cb.build());
             Twitter twitter = tf.getInstance();
 
-            Status status = twitter.updateStatus(message);
+            //Status status = twitter.updateStatus(message);
+            twitter.updateStatus(message + "\n" + new Date().toString());
         } catch (TwitterException e) {
             e.printStackTrace();
             System.out.println(e);
