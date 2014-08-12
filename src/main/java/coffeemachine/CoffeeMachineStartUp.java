@@ -16,6 +16,7 @@ public class CoffeeMachineStartUp {
 
         //schema migration
         Flyway flyway = new Flyway();
+        flyway.setValidateOnMigrate(false);
         flyway.setDataSource(dataSource.getUrl(), dataSource.getName(), dataSource.getPassword());
         flyway.migrate();
 
